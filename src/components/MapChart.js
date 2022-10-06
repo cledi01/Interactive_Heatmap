@@ -12,79 +12,9 @@ import {
 	Geography,
 	ZoomableGroup,
 } from 'react-simple-maps';
-import { scaleQuantize, scaleLinear, scaleLog } from 'd3-scale';
+import { scaleLinear } from 'd3-scale';
 import { csv } from 'd3-fetch';
-import { createSvgIcon } from '@material-ui/core';
-
-let offenses = [
-	'aggravated-assault',
-	'burglary',
-	'larceny',
-	'motor-vehicle-theft',
-	'homicide',
-	'rape',
-	'robbery',
-	'arson',
-	'violent-crime',
-	'property-crime',
-];
-let states = [
-	'AK',
-	'AL',
-	'AR',
-	'AS',
-	'AZ',
-	'CA',
-	'CO',
-	'CT',
-	'DC',
-	'DE',
-	'FL',
-	'GA',
-	'GU',
-	'HI',
-	'IA',
-	'ID',
-	'IL',
-	'IN',
-	'KS',
-	'KY',
-	'LA',
-	'MA',
-	'MD',
-	'ME',
-	'MI',
-	'MN',
-	'MO',
-	'MS',
-	'MT',
-	'NC',
-	'ND',
-	'NE',
-	'NH',
-	'NJ',
-	'NM',
-	'NV',
-	'NY',
-	'OH',
-	'OK',
-	'OR',
-	'PA',
-	'PR',
-	'RI',
-	'SC',
-	'SD',
-	'TN',
-	'TX',
-	'UT',
-	'VA',
-	'VI',
-	'VT',
-	'WA',
-	'WI',
-	'WV',
-	'WY',
-];
+import { offenses } from './lists'
 
 let getDaysArray = (start, end) => {
 	for (
@@ -96,9 +26,7 @@ let getDaysArray = (start, end) => {
 	}
 	return arr;
 };
-// const dates = getDaysArray(new Date('2021-01-12'), new Date('2021-07-30'));
 
-// const geoUrl = 'https://cdn.jsdelivr.net/npm/us-atlas@3/counties-10m.json';
 const geoUrl = 'https://cdn.jsdelivr.net/npm/us-atlas@3/states-10m.json';
 
 const MapChart = () => {
@@ -117,10 +45,6 @@ const MapChart = () => {
 	let colorScale = scaleLinear().domain(range).range(colors);
 
 	useEffect(() => {
-		// https://www.bls.gov/lau/
-		// csv('/unemployment-by-county-2017.csv').then((counties) => {
-		// 	setData(counties);
-		// });
 		csv('/us_state_vaccinations.csv').then((states) => {
 			setData(states);
 		});
@@ -227,14 +151,13 @@ const MapChart = () => {
 			case 'violent-crime':
 				setRange([0, 0.008]);
 				break;
-			case 'property-crime':
-				setRange([0, 0.04]);
+            case 'property-crime':
+                setRange([0, 0.04]);
+                break;
+            default:
+                break;
 		}
 	}, [valueField]);
-
-	// useEffect(() => {
-	// 	console.log(data);
-	// }, [data]);
 
 	const handleChange = (_, value) => {
 		setType(value);
@@ -291,8 +214,8 @@ const MapChart = () => {
 						{dates[slider]}{' '}
 						{type === 'Unemployment Rates' && '2021'}
 					</h3>
-					<ComposableMap projection="geoAlbersUsa" width={800}>
-						<ZoomableGroup zoom={1}>
+					<ComposableMap projection="geoAlbersUsa" projectionConfig={{scale: 500}} height={250}>
+						<ZoomableGroup >
 							<Geographies geography={geoUrl}>
 								{({ geographies }) =>
 									geographies.map((geo) => {
