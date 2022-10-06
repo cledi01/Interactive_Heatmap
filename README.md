@@ -1,4 +1,4 @@
-# Interactive heatmap of various kinds of state-wide data across time
+# Interactive heatmap of temporal data across US states with a time slider
 This is a repository to document the work I did for a Visualization focused
 hackathon. To see the graph, npm install --> npm start.
 
